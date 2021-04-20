@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+	</head>
+	<body>
+		<h1>Add product Farmer</h1>
+		<form  method="post" action="/api/farmer/addproduct" enctype="multipart/form-data">
+			<input type="text" autocomplete="off" id="title" name="title"   placeholder="title" />
+            <input type="text" autocomplete="off" id="desc" name="description" placeholder="description" />
+            <input type="number" autocomplete="off" id="qty" name="qty" placeholder="qty" />
+            <input type="number" autocomplete="off" id="price" name="price"  placeholder="price" />
+			<input type="file" accept="image/*"  name="avatar" class="avatar" id="customFile">
+			<label class="custom-file-label" for="customFile">Choose file</label>
+			</div>
+			
+		
+			
+			<input type="submit" value="Submit Form" />
+		</form>
+		
+	</body>
+
+		
+</html>
+
+
+
+<!-- <form method="post" action="/api/farmer/uploadimage" enctype="multipart/form-data">
+	<div class="custom-file">
+		<input type="file" accept="image/*"  name="avatar" class="avatar" id="customFile">
+		<label class="custom-file-label" for="customFile">Choose file</label>
+	  </div>
+</form> -->
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+	</head>
+	<body>
+		<h1>Add product Farmer</h1>
+		<form id="reg-form" enctype="multipart/form-data">
+			<input type="text" autocomplete="off" id="title"  placeholder="title" />
+            <input type="text" autocomplete="off" id="desc" placeholder="description" />
+            <input type="number" autocomplete="off" id="qty" placeholder="qty" />
+            <input type="number" autocomplete="off" id="price"  placeholder="price" />
+
+		
+			
+			<input type="submit" value="Submit Form" />
+		</form>
+		
+	</body>
+
+		<script>
+			const form = document.getElementById('reg-form')
+			form.addEventListener('submit', registerUser)
+
+			async function registerUser(event) {
+				event.preventDefault()
+				const title = document.getElementById('title').value
+                const description = document.getElementById('desc').value
+                const qty = document.getElementById('qty').value
+                const price = document.getElementById('price').value
+                // const avtar = document.getElementById('avtar').value;
+				const result = await fetch('/api/farmer/addproduct', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+                        title:title,
+                        description:description,
+                        qty:qty,
+                        price:price,
+						token_farmer: localStorage.getItem('token_farmer'),
+						
+					})
+				}).then((res) => res.json())
+
+				if (result.status === 'ok') {
+					// everythign went fine
+					alert('Success')
+				} else {
+					alert(result.error)
+				}
+			}
+		</script>
+	</body>
+</html> -->
