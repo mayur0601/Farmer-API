@@ -2,6 +2,7 @@
 const Farmer = require('../models/farmer');
 const Product = require('../models/product');
 const Order = require('../models/order');
+const bcrypt=require('bcryptjs')
 module.exports.createFarmer =async function(req,res){
 	const {username,password:plainTextPassword,cpassword,email} = req.body;
 

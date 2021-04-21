@@ -4,7 +4,7 @@ const path = require('path');
 const app = express();
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose');
-module.exports = bcrypt = require('bcrypt');
+module.exports = bcrypt = require('bcryptjs');
 module.exports = jwt = require('jsonwebtoken');
 const {LocalStorage} = require("node-localstorage");
 module.exports = localStorage = new LocalStorage('./scratch'); 

@@ -2,7 +2,7 @@ const Vendor = require('../models/vendor');
 const Order = require('../models/order');
 const Farmer = require('../models/farmer');
 const Product = require('../models/product');
-
+const bcrypt=require('bcryptjs')
 module.exports.vendorSignup = async (req,res)=>{
     const {username,password:plainTextPassword,cpassword,email} = req.body;
 
