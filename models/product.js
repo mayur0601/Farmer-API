@@ -25,6 +25,10 @@ const productSchma = new mongoose.Schema({
         ref: 'farmer',
         required:true
     },
+    source:{
+        type:String,
+       required:true
+    },
     productImage: {
         
         type: String

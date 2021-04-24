@@ -2,9 +2,9 @@ const Vendor = require('../models/vendor');
 const Order = require('../models/order');
 const Farmer = require('../models/farmer');
 const Product = require('../models/product');
-
+const bcrypt=require('bcryptjs')
 module.exports.vendorSignup = async (req,res)=>{
-    const {username,password:plainTextPassword,cpassword,email} = req.body;
+    const {username,password:plainTextPassword,cpassword,email,address} = req.body;
 
     // validattion
             if (!username || typeof username !== 'string') {
@@ -36,7 +36,7 @@ module.exports.vendorSignup = async (req,res)=>{
 
             // create vendor
                 let vendor = await Vendor.create({
-                    username, password,cPassword:cpassword,email
+                    username, password,cPassword:cpassword,email,address
                 });
 
                 return res.status(200).json({ status: 'ok'});
@@ -132,8 +132,11 @@ module.exports.orderProduct = async (req,res)=>{
 
 module.exports.getAllProduct = async (req,res)=>{
     try{
-        let product = await Product.find({}).sort('-createdAt'); // collect all the product and sort by createdAt
-        console.log("prooooooo",product);
+        let product = await Product.find({}).sort('-createdAt')
+        
+     // collect all the product and sort by createdAt
+        
+        
         return res.status(200).json({ status:'ok',allProducts:product}); // sending product through JSON
 
     }catch(err){
@@ -168,4 +171,23 @@ module.exports.vendorInfo = async (req,res) =>{
 module.exports.logoutVendor = async (req,res)=>{
 	localStorage.removeItem('token_vendor');
 	return res.json({ status:'ok',message:'logout successfully'});
+}
+
+module.exports.updataVendor = async (req,res)=>{
+    const {username,email,address} = req.body;
+    const token = localStorage.getItem('token_vendor'); 
+    const vendor = jwt.verify(token, JWT_SECRET_Vendor);
+    
+    Vendor.findByIdAndUpdate(vendor.id,{
+     username:username,
+     email:email,
+     address:address   
+    },function(err,updatedInfo){
+        if(err){
+            console.log("error in updation",err);
+            return;
+        }
+        return res.status(200).json({success:'ok'})
+    })
+
 }

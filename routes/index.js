@@ -50,6 +50,7 @@ router.get('/api/farmer/farmerInfo',farmerController.farmerInfo);
 router.post('/api/vendor/signUp',vendorController.vendorSignup);
 router.post('/api/vendor/login',vendorController.vendorLogin);
 router.get('/api/vendor/logout',vendorController.logoutVendor);
+router.get('/api/vendor/updataVendor',vendorController.updataVendor);
 
 router.post('/api/vendor/orderProduct',vendorController.orderProduct);
 

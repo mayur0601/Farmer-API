@@ -2,6 +2,7 @@
 const Farmer = require('../models/farmer');
 const Product = require('../models/product');
 const Order = require('../models/order');
+const bcrypt=require('bcryptjs')
 module.exports.createFarmer =async function(req,res){
 	const {username,password:plainTextPassword,cpassword,email} = req.body;
 
@@ -83,7 +84,7 @@ module.exports.addProduct= async (req,res) =>{
 		console.log("req of product",req.body);
 		console.log("req file is",req.file);
 
-        const {description,title,qty,price,token_farmer} = req.body;
+        const {description,title,qty,price,token_farmer,source} = req.body;
 
         const user = jwt.verify(token_farmer, JWT_SECRET_Farmer)
 
@@ -97,7 +98,8 @@ module.exports.addProduct= async (req,res) =>{
                 Qty:qty,
                 price,
 				productImage:req.file.path,
-                farmer:user.id
+                farmer:user.id,
+				source:source
             });
 
       

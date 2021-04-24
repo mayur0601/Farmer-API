@@ -1,10 +1,10 @@
 const express = require('express');
-const port = 8000;
+const port = process.env.PORT ||  8000;
 const path = require('path');
 const app = express();
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose');
-module.exports = bcrypt = require('bcrypt');
+module.exports = bcrypt = require('bcryptjs');
 module.exports = jwt = require('jsonwebtoken');
 const {LocalStorage} = require("node-localstorage");
 module.exports = localStorage = new LocalStorage('./scratch'); 
@@ -17,7 +17,7 @@ const cors = require('cors');
 
 
 app.use(cors({
-    origin:['http://localhost:3000'],
+    origin:['http://localhost:3000','http://localhost:3001'],
     credentials:true,
     // redirected: true
 }))
