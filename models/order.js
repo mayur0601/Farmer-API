@@ -20,6 +20,9 @@ const orderSchma = new mongoose.Schema({
     deliver:{
         type:Boolean,
         required:true
+    },
+    address:{
+        type:String
     }
    
 },

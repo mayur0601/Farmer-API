@@ -2,7 +2,18 @@
 const Farmer = require('../models/farmer');
 const Product = require('../models/product');
 const Order = require('../models/order');
-const bcrypt=require('bcryptjs')
+const bcrypt=require('bcryptjs');
+// const Datauri  = require('datauri');
+const path = require('path');
+// const cloudinaryConfig = require('../config/cloudinaryconfig');
+// const uploader = require('../config/cloudinaryconfig');
+// const DatauriParser = require('datauri/parser');
+// const parser = new DatauriParser();
+
+// const dUri = new Datauri();
+// const dataUri = req => parser.format(path.extname(req.file.originalname).toString(), req.file.buffer);
+
+
 module.exports.createFarmer =async function(req,res){
 	const {username,password:plainTextPassword,cpassword,email} = req.body;
 
@@ -83,6 +94,16 @@ module.exports.addProduct= async (req,res) =>{
     try{
 		console.log("req of product",req.body);
 		console.log("req file is",req.file);
+		// const image_path="";
+		
+		// 	const file = dataUri(req).content;
+		// 	console.log("image is file --",file);
+		// 	 cloudinaryConfig.uploader.upload(file).then((result) => {
+		// 		 image_path = result.url;
+		// 	});
+
+		// 	console.log("image is --",image_path);
+		
 
         const {description,title,qty,price,token_farmer,source} = req.body;
 

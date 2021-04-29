@@ -79,6 +79,9 @@ module.exports.orderProduct = async (req,res)=>{
     const vendor = jwt.verify(token, JWT_SECRET_Vendor); // find login vendor through given token
     console.log("vendor is",vendor);
     console.log(req.query); // query getting from url (query is product id)
+    console.log("address",req.body);
+    const {address} = req.body;
+    const address_to_deliver = `${address.name} ${address.address2} ${address.address1} ${address.locality} ${address.postalCode} ${address.administrativeArea} `
     try{
         let product = await Product.findById(req.query.id).lean(); // find product using the query
         console.log("product is",product);
@@ -90,6 +93,7 @@ module.exports.orderProduct = async (req,res)=>{
                 product:product._id,
                 farmer:product.farmer,
                 vendor:vendor.id,
+                address:address_to_deliver,
                 deliver:false
             });
             
@@ -187,7 +191,7 @@ module.exports.updataVendor = async (req,res)=>{
             console.log("error in updation",err);
             return;
         }
-        return res.status(200).json({success:'ok'})
+        return res.status(200).json({success:'ok',data:updatedInfo})
     })
 
 }

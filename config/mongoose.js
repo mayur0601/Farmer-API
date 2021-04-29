@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
 
+const connection_url = 'mongodb+srv://admin:Mayur@12345@cluster0.m0cpw.mongodb.net/farmerdb?retryWrites=true&w=majority'
 
-mongoose.connect('mongodb://localhost:27017/farmdb', {
+// 'mongodb://localhost:27017/farmdb'
+mongoose.connect(connection_url, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
 	useCreateIndex: true

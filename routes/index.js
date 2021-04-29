@@ -1,8 +1,11 @@
 const express = require('express');
 
 const router = express.Router();
+// const cloudinary = require('cloudinary').v2;
+// const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const multer = require('multer');
 const path = require('path');
+
 const AVATAR_PATH = path.join('/uploads');
 
 let storage = multer.diskStorage({
@@ -13,6 +16,13 @@ let storage = multer.diskStorage({
       cb(null, Date.now()+file.originalname);
     }
   });
+
+// const storage = multer.memoryStorage();
+
+
+
+
+
 
 
   const fileFilter = (req, file, cb) => {
