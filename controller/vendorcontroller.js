@@ -78,9 +78,9 @@ module.exports.orderProduct = async (req,res)=>{
     console.log("token is",token);
     const vendor = jwt.verify(token, JWT_SECRET_Vendor); // find login vendor through given token
     console.log("vendor is",vendor);
-    console.log(req.query); // query getting from url (query is product id)
+    /*console.log(req.query);*/ // query getting from url (query is product id)
     try{
-        let product = await Product.findById(req.query.id).lean(); // find product using the query
+        let product = await Product.findById(req.params.id).lean(); // find product using the query
         console.log("product is",product);
 
         if(vendor){  // validation (check vendor login or not)

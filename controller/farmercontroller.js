@@ -1,8 +1,11 @@
-
 const Farmer = require('../models/farmer');
 const Product = require('../models/product');
 const Order = require('../models/order');
 const bcrypt=require('bcryptjs')
+const cloudinary=require('../cloudinary')
+const fs=require('fs')
+
+
 module.exports.createFarmer =async function(req,res){
 	const {username,password:plainTextPassword,cpassword,email} = req.body;
 
@@ -31,24 +34,18 @@ module.exports.createFarmer =async function(req,res){
         
             // hashing the password
             const password = await bcrypt.hash(plainTextPassword,10);
-	try {
-		const response = await Farmer.create({
-			username,
-			password, 
-			cPassword:cpassword,
-			email
-		})
-		console.log('User created successfully: ', response)
-	} catch (error) {
-		if (error.code === 11000) {
-			// duplicate key
-			return res.json({ status: 'error', error: 'Username already in use' })
-		}
-		throw error
-	}
+			//create farmer
+			try{
+			let farmer = await Farmer.create({
+				username, password,email,cPassword:cpassword,
+			});
 
-	res.json(200,
-        { status: 'ok'})
+			return res.status(200).json({ status: 'ok'});
+			
+		}
+		catch(err){
+			return res.status(500).json({message:err.message});
+		}
 }
 
 module.exports.Farmerlogin = async (req, res) => {
@@ -81,10 +78,9 @@ module.exports.Farmerlogin = async (req, res) => {
 
 module.exports.addProduct= async (req,res) =>{
     try{
-		console.log("req of product",req.body);
-		console.log("req file is",req.file);
-
-        const {description,title,qty,price,token_farmer} = req.body;
+		
+		const result= await cloudinary.uploader.upload(req.file.path)
+		const {description,title,qty,price,token_farmer} = req.body;
 
         const user = jwt.verify(token_farmer, JWT_SECRET_Farmer)
 
@@ -123,24 +119,39 @@ module.exports.addProduct= async (req,res) =>{
 }
 
 module.exports.deleteProduct =async (req,res)=>{
-	console.log("query is",req.query.id);
+	console.log("query is",req.params.id);
 
-	let product =await Product.findById(req.query.id);
+	let product =await Product.findById(req.params.id);
 
 	let farmer = await Farmer.findById(product.farmer);
 	
-	 let myProductsFarmer = farmer.myProducts;
+	let myProductsFarmer = farmer.myProducts;
 
-	 const index = myProductsFarmer.indexOf(req.query.id);
+	 const index = myProductsFarmer.indexOf(req.params.id);
 		if (index > -1) {
 			myProductsFarmer.splice(index, 1);
 		}
 
-	await Product.findByIdAndDelete(req.query.id);
+	await Product.findByIdAndDelete(req.params.id);
 
 	farmer.save();
 
-	return res.json({status:"deleted successfully"});
+	return res.json({message:"deleted successfully"});
+
+}
+
+module.exports.showproducts= async(req,res)=>{
+	try{
+	const token = localStorage.getItem('token_farmer'); // collecting token from local storage
+	console.log("tokkeeen ",token);
+	const farmer = jwt.verify(token, JWT_SECRET_Farmer); // find login farmer through given token
+
+	const details=await Product.find({farmer:farmer.id})
+	console.log(details)
+	}
+	catch(err){
+	console.log(err)
+	}
 
 }
 
@@ -149,19 +160,18 @@ module.exports.farmerInfo = (req,res)=>{
        
         const token = localStorage.getItem('token_farmer'); // collecting token from local storage
 		console.log("tokkeeen ",token);
-    const farmer = jwt.verify(token, JWT_SECRET_Farmer); // find login vendor through given token
+    	const farmer = jwt.verify(token, JWT_SECRET_Farmer); // find login farmer through given token
 
 					  Farmer.findById(farmer.id)
 						.populate('myProducts').populate({
 							path:'orders',
 							populate:{
 								path:'product vendor'
-								
 							}
 						})
 						.exec(function (err, user) {
 							if (err)  return console.log(err);
-							res.json({ status:'ok',farmer:user});
+						   res.json({status:"ok",farmer:user})
 						});
 
     }catch(err){

@@ -3,14 +3,15 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
-const AVATAR_PATH = path.join('/uploads');
+
+
 
 let storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, path.join(__dirname, '..', AVATAR_PATH));
+      cb(null, './uploads/');
     },
     filename: function (req, file, cb) {
-      cb(null, Date.now()+file.originalname);
+      cb(null, file.originalname);
     }
   });
 
@@ -33,6 +34,7 @@ let storage = multer.diskStorage({
   });
   
 
+
 console.log('router loaded');
 
 const farmerController = require('../controller/farmercontroller');
@@ -43,19 +45,21 @@ router.post('/api/farmer/signUp',farmerController.createFarmer);
 router.post('/api/farmer/login',farmerController.Farmerlogin);
 router.get('/api/farmer/logout',farmerController.logoutFarmer);
 router.post('/api/farmer/addproduct',upload.single('productImage'),farmerController.addProduct);
-router.get('/api/farmer/deleteproduct',farmerController.deleteProduct);
+router.get('/api/farmer/deleteproduct/:id',farmerController.deleteProduct);
 router.get('/api/farmer/farmerInfo',farmerController.farmerInfo);
+router.get('/api/farmer/showproducts',farmerController.showproducts);
 // Vendor
 
 router.post('/api/vendor/signUp',vendorController.vendorSignup);
 router.post('/api/vendor/login',vendorController.vendorLogin);
 router.get('/api/vendor/logout',vendorController.logoutVendor);
 
-router.post('/api/vendor/orderProduct',vendorController.orderProduct);
+router.post('/api/vendor/orderProduct/:id',vendorController.orderProduct);
 
 router.get('/api/vendor/vendorInfo',vendorController.vendorInfo);
 
 router.get('/api/vendor/getAllproduct',vendorController.getAllProduct);
+
 
 
 
