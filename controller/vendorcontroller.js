@@ -4,7 +4,7 @@ const Farmer = require('../models/farmer');
 const Product = require('../models/product');
 const bcrypt=require('bcryptjs')
 module.exports.vendorSignup = async (req,res)=>{
-    const {username,password:plainTextPassword,cpassword,email,address} = req.body;
+    const {username,password:plainTextPassword,cpassword,email,address,contact} = req.body;
 
     // validattion
             if (!username || typeof username !== 'string') {
@@ -36,7 +36,7 @@ module.exports.vendorSignup = async (req,res)=>{
 
             // create vendor
                 let vendor = await Vendor.create({
-                    username, password,cPassword:cpassword,email,address
+                    username, password,cPassword:cpassword,email,address,contact
                 });
 
                 return res.status(200).json({ status: 'ok'});
@@ -178,20 +178,22 @@ module.exports.logoutVendor = async (req,res)=>{
 }
 
 module.exports.updataVendor = async (req,res)=>{
-    const {username,email,address} = req.body;
+    const {username,email,contact} = req.body;
     const token = localStorage.getItem('token_vendor'); 
     const vendor = jwt.verify(token, JWT_SECRET_Vendor);
-    
-    Vendor.findByIdAndUpdate(vendor.id,{
-     username:username,
-     email:email,
-     address:address   
-    },function(err,updatedInfo){
-        if(err){
-            console.log("error in updation",err);
-            return;
-        }
-        return res.status(200).json({success:'ok',data:updatedInfo})
-    })
+    try{
+        let updatVendor = await Vendor.findByIdAndUpdate(vendor.id,{
+            username:username,
+            email:email,
+            contact:contact   
+           });
+       
+           updatVendor.save();
+           
+           return res.status(200).json({success:'ok',data:updatVendor})
+    }catch(err){
+        res.status(500).json({ status:err.message})
+    }
+  
 
 }

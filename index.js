@@ -13,14 +13,18 @@ module.exports = JWT_SECRET_Vendor = 'sdjkfh8923yhjdksbfma@#*(&@*!^#&@$$^&*@$^&b
 const db = require('./config/mongoose');
 const cors = require('cors');
 
+// var cors = require('cors')  //use this
+// var app = express()
+
+app.use(cors()) //and this
 
 
 
-app.use(cors({
-    origin:['http://localhost:3000','http://localhost:3001'],
-    credentials:true,
-    // redirected: true
-}))
+// app.use(cors({
+//     origin:['http://localhost:3000','http://localhost:3001'],
+//     credentials:true,
+//     // redirected: true
+// }))
 // mongoose.connect('mongodb://localhost:27017/farmdb', {
 // 	useNewUrlParser: true,
 // 	useUnifiedTopology: true,
@@ -34,7 +38,9 @@ app.use('/',express.static(path.join(__dirname, 'views')))
 
 app.use(bodyParser.json());
 
+app.use('/api/products',require('./controller/ecommercecontroller'));
 app.use('/',require('./routes/'));
+
 
 
 app.listen(port,()=>{

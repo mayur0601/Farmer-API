@@ -1,12 +1,14 @@
 const express = require('express');
 
 const router = express.Router();
-// const cloudinary = require('cloudinary').v2;
-// const { CloudinaryStorage } = require('multer-storage-cloudinary');
+
 const multer = require('multer');
 const path = require('path');
 
 const AVATAR_PATH = path.join('/uploads');
+
+const cloudinary=require('../config/cloudinaryconfig');
+
 
 let storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -16,13 +18,6 @@ let storage = multer.diskStorage({
       cb(null, Date.now()+file.originalname);
     }
   });
-
-// const storage = multer.memoryStorage();
-
-
-
-
-
 
 
   const fileFilter = (req, file, cb) => {
@@ -57,10 +52,13 @@ router.get('/api/farmer/deleteproduct',farmerController.deleteProduct);
 router.get('/api/farmer/farmerInfo',farmerController.farmerInfo);
 // Vendor
 
+router.post('/images',upload.single('files'),farmerController.uploadImagetoCloudinary);
+
+
 router.post('/api/vendor/signUp',vendorController.vendorSignup);
 router.post('/api/vendor/login',vendorController.vendorLogin);
 router.get('/api/vendor/logout',vendorController.logoutVendor);
-router.get('/api/vendor/updataVendor',vendorController.updataVendor);
+router.post('/api/vendor/updataVendor',vendorController.updataVendor);
 
 router.post('/api/vendor/orderProduct',vendorController.orderProduct);
 

@@ -3,15 +3,21 @@ const Farmer = require('../models/farmer');
 const Product = require('../models/product');
 const Order = require('../models/order');
 const bcrypt=require('bcryptjs');
-// const Datauri  = require('datauri');
 const path = require('path');
-// const cloudinaryConfig = require('../config/cloudinaryconfig');
-// const uploader = require('../config/cloudinaryconfig');
-// const DatauriParser = require('datauri/parser');
-// const parser = new DatauriParser();
+const cloudinary=require('../config/cloudinaryconfig');
+const fs=require('fs');
 
-// const dUri = new Datauri();
-// const dataUri = req => parser.format(path.extname(req.file.originalname).toString(), req.file.buffer);
+
+module.exports.uploadImagetoCloudinary  =async (req,res) => {
+	try{
+  
+		const result= await cloudinary.uploader.upload(req.file.path)
+			res.json(result);
+		}
+		catch(err){
+		   console.log(err)
+		}
+}
 
 
 module.exports.createFarmer =async function(req,res){
@@ -94,22 +100,15 @@ module.exports.addProduct= async (req,res) =>{
     try{
 		console.log("req of product",req.body);
 		console.log("req file is",req.file);
-		// const image_path="";
+		const result= await cloudinary.uploader.upload(req.file.path);
 		
-		// 	const file = dataUri(req).content;
-		// 	console.log("image is file --",file);
-		// 	 cloudinaryConfig.uploader.upload(file).then((result) => {
-		// 		 image_path = result.url;
-		// 	});
-
-		// 	console.log("image is --",image_path);
-		
-
         const {description,title,qty,price,token_farmer,source} = req.body;
 
         const user = jwt.verify(token_farmer, JWT_SECRET_Farmer)
 
 		console.log("farmer",user);
+		console.log("farmer",result);
+
         if(user){
 
             // create Product
@@ -118,7 +117,7 @@ module.exports.addProduct= async (req,res) =>{
                 title,
                 Qty:qty,
                 price,
-				productImage:req.file.path,
+				productImage:result.url,
                 farmer:user.id,
 				source:source
             });
