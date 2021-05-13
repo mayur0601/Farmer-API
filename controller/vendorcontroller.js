@@ -85,6 +85,7 @@ module.exports.orderProduct = async (req,res)=>{
     try{
         let product = await Product.findById(req.query.id).lean(); // find product using the query
         console.log("product is",product);
+        
 
         if(vendor){  // validation (check vendor login or not)
 
